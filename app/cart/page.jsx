@@ -35,8 +35,9 @@ import { useRouter } from "next/navigation";
 import { DELIVERYFEE, MINORDERVALUE } from "../utils/constants";
 import { useAuth } from "@clerk/nextjs";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { DB } from "../firebaseConfig";
+import { DB, REALTIMEDB } from "../firebaseConfig";
 // import CouponCard from "../components/CouponCard";
+import { ref, get, onValue } from "firebase/database"
 import CouponConfetti from "../components/CouponConfetti";
 
 const page = () => {
@@ -66,6 +67,7 @@ const page = () => {
   const gst = useSelector(selectGST)
   const restaurantCharges = useSelector(selectRestaurantCharges)
   const [confetti, setConfetti] = useState(false)
+  const [storeStatus, setStoreStatus] = useState(false)
 
 
   const handleShowMore = (index) => {
@@ -79,6 +81,7 @@ const page = () => {
 
 
   const handleCheckout = async () => {
+    if (!storeStatus) return toast.error("Store is closed", { id: "order" })
     toast.loading("Processing...", { id: "order" })
     if (!cartItems?.length) return toast.error("No items added", { id: "order" })
     if (isConfession && !confessionText) return toast.error("Please add a confession", { id: "order" })
@@ -102,6 +105,16 @@ const page = () => {
 
     getCoupons()
   }, [])
+
+  useEffect(() => {
+    const storeRef = ref(REALTIMEDB, "storeStatus");
+
+    const unsubscribe = onValue(storeRef, (snapshot) => {
+      setStoreStatus(snapshot.val());
+    });
+
+    return () => unsubscribe();
+  }, []);
 
 
   const handleApplyCoupon = (couponId) => {
@@ -486,22 +499,22 @@ const page = () => {
           className="bg-white shadow  w-full fixed bottom-0 divide-y left-0 space-y-4 right-0 pt-4  z-50 rounded-t-lg overflow-hidden"
           style={{ boxShadow: "0px 0px 9px 0px rgba(0, 0, 0, 0.25)" }}
         >
-          <div className="flex items-center px-2 justify-between py-2 pb-0  font-lato w-full">
+          <div onClick={() => setOpenDrawer(true)} className="flex items-center px-2 justify-between py-2 pb-0  font-lato w-full">
             <div className="flex items-start space-x-3 justify-between">
               <LocateFixed size={24} className="text-primary" />
               <div>
                 <p className="text-[#444] text-sm">Delivery at {selectedAddress?.location}</p>
-                <p className="text-[#999] text-sm">
+                {selectedAddress?.address && <p className="text-[#999] text-sm">
                   {selectedAddress?.address}, {selectedAddress?.landmark}
-                </p>
+                </p>}
               </div>
             </div>
-            <p
-              onClick={() => setOpenDrawer(true)}
+
+            {selectedAddress ? <p
+
               className="text-primary text-sm self-start cursor-pointer"
-            >
-              Change
-            </p>
+            > Change</p> : <p className="text-primary text-sm self-start underline cursor-pointer">Add Address</p>}
+
           </div>
           <div className=" py-6  px-2 flex justify-between space-x-2">
             <div className=" space-y-1 flex flex-col justify-center items-start cursor-pointer" onClick={() => setOpenPaymentDrawer(true)}>

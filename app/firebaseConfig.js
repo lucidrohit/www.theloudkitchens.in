@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
 import { collection, getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -16,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const DB = getFirestore(app);
+export const REALTIMEDB = getDatabase(app, "https://testing-8e5fc-default-rtdb.firebaseio.com/");
 export const STORAGE = getStorage(app);
 export const userCollectionRef = collection(DB, "users");
 export const couponsCollectionRef = collection(DB, "coupons");

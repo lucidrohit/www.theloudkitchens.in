@@ -160,7 +160,7 @@ export default function page() {
               })
             }
             value={address.landmark}
-            placeholder="Nearby landmark (optional)"
+            placeholder="Nearby landmark"
             className="py-2 px-2 w-full border rounded-lg outline-none"
             required
           />

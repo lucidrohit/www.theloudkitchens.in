@@ -14,11 +14,12 @@ import { useUser } from "@clerk/nextjs";
 import { clearCart } from "../store/cartSlice";
 import { useDispatch, useSelector } from "react-redux"
 import { addDoc, collection } from "firebase/firestore";
-import { DB } from "../firebaseConfig";
+import { DB, REALTIMEDB } from "../firebaseConfig";
 import { MINORDERVALUE, PENDING } from "../utils/constants";
 import { useRouter } from "next/navigation";
 import { roundWithPrecision } from "../utils/delivery";
 import OrderPlacedConfetti from "../components/OrderPlacedConfetti";
+import { onValue, ref } from "firebase/database";
 
 
 export default function page() {
@@ -42,6 +43,7 @@ export default function page() {
     const [activeStep, setActiveStep] = useState(0)
     const abortController = useRef()
     const [confetti, setConfetti] = useState(false)
+    const [storeStatus, setStoreStatus] = useState(false)
 
 
     const canPay = fileName && imageUrl
@@ -69,6 +71,16 @@ export default function page() {
         return () => toast.dismiss("order");
     }, []);
 
+    useEffect(() => {
+        const storeRef = ref(REALTIMEDB, "storeStatus");
+
+        const unsubscribe = onValue(storeRef, (snapshot) => {
+            setStoreStatus(snapshot.val());
+        });
+
+        return () => unsubscribe();
+    }, []);
+
 
     const handleUp = () => {
         fileInputRef.current.click();
@@ -92,7 +104,7 @@ export default function page() {
     };
 
     const handleCheckout = async (paymentProofUrl) => {
-
+        if (!storeStatus) return toast.error("Store is closed", { id: "order" })
         if (!cartItems?.length) return toast.error("No items added", { id: "order" })
         if (!selectedAddress) return toast.error("Please select an address", { id: 'order' })
         if (totalWithoutDiscount < 200) return toast.error("Minimum order value is ₹200", { id: "order" })
