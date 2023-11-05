@@ -130,11 +130,10 @@ export default function page() {
             }, { signal: abortController.current.signal })
 
             setConfetti(true)
-
+            toast.success("Order placed successfully", { id: "order" })
+            router.replace("/orders")
+            dispatch(clearCart())
             setTimeout(() => {
-                toast.success("Order placed successfully", { id: "order" })
-                router.replace("/orders")
-                dispatch(clearCart())
                 setConfetti(false)
             }
                 , 3000)

@@ -232,18 +232,6 @@ const page = () => {
                       <h3 className="font-lato text-sm font-medium inline">
                         {item?.name}
                       </h3>
-                      <span className="font-lato self-start font-medium sm:self-center inline text-xs text-[#777]">
-                        {
-                          items.map((cuisine, index) => <p key={index} className=" font-lato text-xs text-[#757C8F] space-x-1">
-                            {cuisine.map((subItem, index) => (
-                              <span key={index}>
-                                {subItem.quantity * item.quantity} x{subItem.item.name} {cuisine.length - 1 == index ? "" : " ·"}
-                              </span>
-                            ))}
-                          </p>
-                          )}
-
-                      </span>
                     </div>
                     <div
                       onClick={() => handleShowMore(index)}
