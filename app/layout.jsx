@@ -22,6 +22,7 @@ const raleway = Raleway({
 
 export const metadata = {
   title: 'TheLoudKitchens',
+  manifest:"/manifest.json",
   description: 'The Loud Kitchens is a cloud kitchens startup initiated by the students of nit srinagar.',
   openGraph: {
     type: 'website',
