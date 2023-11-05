@@ -60,7 +60,7 @@ export default function Carousel({ slides }) {
                                 setCurrent(i);
                             }}
                             key={"circle" + i}
-                            className={`rounded-full w-[7px] h-[7px] cursor-pointer transition-all  ${i != current ? "bg-[#DDDDDD]" : "bg-primary w-[20px]"
+                            className={`rounded-full  h-[7px] cursor-pointer transition-all  ${i != current ? "bg-[#DDDDDD] w-[7px]" : "bg-primary w-[20px]"
                                 }`}
                         ></div>
                     );
