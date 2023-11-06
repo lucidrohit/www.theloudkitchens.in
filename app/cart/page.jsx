@@ -118,14 +118,15 @@ const page = () => {
 
 
   const handleApplyCoupon = (couponId) => {
+    const coupon = coupons.find(coupon => coupon.id === couponId)
+    const validTill = new Date(coupon.validTill).getTime()
+    toast.loading("Applying coupon...", { id: "coupon" })
     try {
-      toast.loading("Applying coupon...", { id: "coupon" })
-      const coupon = coupons.find(coupon => coupon.id === couponId)
       if (!coupon.validity) {
         return toast.error("Coupon expired", { id: "coupon" })
       }
 
-      if (coupon.validTill && coupon.validTill.toMillis() < Date.now()) {
+      if (validTill && validTill < Date.now()) {
         return toast.error("Coupon expired", { id: "coupon" })
       }
       if (totalWithoutDiscount < coupon.minCartValue) {

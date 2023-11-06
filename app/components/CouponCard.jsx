@@ -7,13 +7,15 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCoupon, setCouponDetails } from "../store/cartSlice";
 
-const CouponCard = ({ id, discountPercent, maxDiscountValue, minCartValue, validTill, validity }) => {
+const CouponCard = ({ id, discountPercent, maxDiscountValue, minCartValue, validTill: dateTill, validity }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
   const dispatch = useDispatch();
   const coupon = useSelector(selectCoupon);
 
+  const validTill = new Date(dateTill).getTime()
   const date = validTill.toDate();
+
   const formattedDate = date.toLocaleString('en-US', {
     month: 'short',
     day: '2-digit',

@@ -41,7 +41,9 @@ export default function CouponSearch() {
             if (!(fetchedCoupon).exists()) {
                 return toast.error("Invalid Coupon", { id: "coupon" })
             }
-            const { discountPercent, maxDiscountValue, minCartValue, validTill, validity, userId } = fetchedCoupon.data()
+            const { discountPercent, maxDiscountValue, minCartValue, validTill: dateTill, validity, userId } = fetchedCoupon.data()
+
+            const validTill = new Date(dateTill).getTime()
 
 
             if (userId && userId !== idOfUser) {
@@ -52,7 +54,7 @@ export default function CouponSearch() {
                 return toast.error("Coupon expired", { id: "coupon" })
             }
 
-            if (validTill && validTill.toMillis() < Date.now()) {
+            if (validTill && validTill < Date.now()) {
                 return toast.error("Coupon expired", { id: "coupon" })
             }
             if (totalWithoutDiscount < minCartValue) {
