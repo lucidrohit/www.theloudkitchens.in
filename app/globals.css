@@ -8,6 +8,7 @@
   -webkit-tap-highlight-color: transparent;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
+  scroll-behavior: smooth;
 }
 
 @layer utilities {
@@ -39,7 +40,5 @@ html {
   touch-action: pan-x pan-y;
   touch-zooming: none;
   user-zoom: fixed;
-  max-height: 100vh;
   max-width: 100vw;
-  overflow: hidden;
 }
