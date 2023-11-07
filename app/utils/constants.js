@@ -9,7 +9,7 @@ export const DELIVERYFEE = 40
 export const MINORDERVALUE = 150
 export const MINORDERVALUEFORCOUPON = 150
 
-export const DESKTOPWEBSITEURL = 'https://www.theloudkitchens.in'
+export const DESKTOPWEBSITEURL = 'https://www.old.theloudkitchens.in'
 
 export const PUBLICROUTES = [
     "/",
