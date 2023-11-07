@@ -75,6 +75,14 @@ export const cartSlice = createSlice({
                 state.restaurantCharges;
             state.totalWithoutDiscount = totalWithoutDiscount;
             state.total = totalWithoutDiscount - state.discount;
+
+            if (state.coupon.id) {
+                state.discount = roundWithPrecision(Math.min(
+                    state.coupon.maxDiscountValue,
+                    state.totalWithoutDiscount * (state.coupon.discountPercent / 100)
+                ), 2);
+                state.total = state.totalWithoutDiscount - state.discount;
+            }
             if (!state.items) {
                 state = state.total = 0;
             }
@@ -106,6 +114,14 @@ export const cartSlice = createSlice({
 
             state.totalWithoutDiscount = totalWithoutDiscount;
             state.total = totalWithoutDiscount - state.discount;
+
+            if (state.coupon.id) {
+                state.discount = roundWithPrecision(Math.min(
+                    state.coupon.maxDiscountValue,
+                    state.totalWithoutDiscount * (state.coupon.discountPercent / 100)
+                ), 2);
+                state.total = state.totalWithoutDiscount - state.discount;
+            }
 
             if (state.items.length === 0) state.total = 0;
 
